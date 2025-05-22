@@ -81,7 +81,7 @@ const authController = {
           role: user.role
         },
         process.env.JWT_SECRET,
-        { 
+        {
           algorithm: 'HS256', // Explicitly specify the algorithm
           expiresIn: '1h', // Token expires in 1 hour
           issuer: 'stockflow-api', // Who issued the token
@@ -101,6 +101,23 @@ const authController = {
       });
     } catch (error) {
       console.error('Login error:', error);
+      res.status(500).json({
+        success: false,
+        message: error.message || 'Internal server error'
+      });
+    }  },
+
+  // Logout user
+  logout: async (req, res) => {
+    try {
+      // Di sini kita bisa menambahkan token ke blacklist jika diperlukan
+      // Untuk sekarang, kita hanya kirim respons sukses
+      res.json({
+        success: true,
+        message: 'Logged out successfully'
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
       res.status(500).json({
         success: false,
         message: error.message || 'Internal server error'
