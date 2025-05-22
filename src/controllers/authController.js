@@ -105,7 +105,8 @@ const authController = {
         success: false,
         message: error.message || 'Internal server error'
       });
-    }  },
+    }
+  },
 
   // Logout user
   logout: async (req, res) => {
