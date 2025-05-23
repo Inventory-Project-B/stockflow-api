@@ -107,7 +107,7 @@ Content-Type: multipart/form-data
 
 Form Data:
 - nama_barang: string
-- deskripsi: string
+- kategori: enum (Daster, Gamis, Kaftan, Dress)
 - harga: number
 - stok: number
 - foto: file

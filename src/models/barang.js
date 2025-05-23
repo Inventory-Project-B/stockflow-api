@@ -27,10 +27,13 @@ const Barang = sequelize.define('Barang', {  id_barang: {
     validate: {
       min: 0
     }
-  },
-  kategori: {
-    type: DataTypes.STRING,
-    allowNull: false
+  },  kategori: {
+    type: DataTypes.ENUM('Daster', 'Gamis', 'Kaftan', 'Dress'),
+    allowNull: false,
+    validate: {
+      notEmpty: true,
+      isIn: [['Daster', 'Gamis', 'Kaftan', 'Dress']]
+    }
   },
   foto: {
     type: DataTypes.STRING,
