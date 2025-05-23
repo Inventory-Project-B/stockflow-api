@@ -7,9 +7,8 @@ const barangKeluarController = {
   // Get all barang keluar
   getAllBarangKeluar: async (req, res) => {
     try {
-      const barangKeluar = await BarangKeluar.findAll({
-        include: [
-          { model: Barang, attributes: ['nama_barang'] }
+      const barangKeluar = await BarangKeluar.findAll({        include: [
+          { model: Barang, attributes: ['nama_barang', 'harga'] }
         ]
       });
       res.json({
