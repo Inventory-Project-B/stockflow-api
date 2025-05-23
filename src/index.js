@@ -4,6 +4,9 @@ const dotenv = require('dotenv');
 const { sequelize } = require('./config/database');
 const User = require('./models/user');
 const authRoutes = require('./routes/auth');
+const barangRoutes = require('./routes/barang');
+const barangMasukRoutes = require('./routes/barangMasuk');
+const barangKeluarRoutes = require('./routes/barangKeluar');
 
 // Load environment variables
 dotenv.config();
@@ -17,6 +20,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/barang', barangRoutes);
+app.use('/api/barang-masuk', barangMasukRoutes);
+app.use('/api/barang-keluar', barangKeluarRoutes);
 
 // Basic route for testing
 app.get('/', (req, res) => {
