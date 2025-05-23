@@ -28,17 +28,17 @@ const barangMasukController = {
   createBarangMasuk: async (req, res) => {
     const t = await sequelize.transaction();
 
-    try {      const { barang_id, jumlah } = req.body;
+    try {      const { id_barang, jumlah } = req.body;
 
       // Create barang masuk record
       const barangMasuk = await BarangMasuk.create({
-        barang_id,
+        id_barang,
         jumlah,
         user_id: req.user.id
       }, { transaction: t });
 
       // Update stok barang
-      const barang = await Barang.findByPk(barang_id, { transaction: t });
+      const barang = await Barang.findByPk(id_barang, { transaction: t });
       if (!barang) {
         await t.rollback();
         return res.status(404).json({

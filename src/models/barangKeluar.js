@@ -4,7 +4,7 @@ const Barang = require('./barang');
 const User = require('./user');
 
 const BarangKeluar = sequelize.define('BarangKeluar', {
-  id: {
+  id_bk: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
@@ -27,7 +27,7 @@ const BarangKeluar = sequelize.define('BarangKeluar', {
 });
 
 // Relationships
-BarangKeluar.belongsTo(Barang, { foreignKey: 'barang_id' });
+BarangKeluar.belongsTo(Barang, { foreignKey: 'id_barang' });
 BarangKeluar.belongsTo(User, { foreignKey: 'user_id' });
 
 module.exports = BarangKeluar;

@@ -29,10 +29,10 @@ const barangKeluarController = {
   createBarangKeluar: async (req, res) => {
     const t = await sequelize.transaction();
 
-    try {      const { barang_id, jumlah } = req.body;
+    try {      const { id_barang, jumlah } = req.body;
 
       // Check stok barang
-      const barang = await Barang.findByPk(barang_id, { transaction: t });
+      const barang = await Barang.findByPk(id_barang, { transaction: t });
       if (!barang) {
         await t.rollback();
         return res.status(404).json({
@@ -48,11 +48,9 @@ const barangKeluarController = {
           message: 'Stok tidak mencukupi'
         });
       }      // Calculate jumlah_harga
-      const jumlah_harga = barang.harga * parseInt(jumlah);
-
-      // Create barang keluar record
+      const jumlah_harga = barang.harga * parseInt(jumlah);      // Create barang keluar record
       const barangKeluar = await BarangKeluar.create({
-        barang_id,
+        id_barang,
         jumlah,
         jumlah_harga,
         user_id: req.user.id
@@ -98,8 +96,7 @@ const barangKeluarController = {
         attributes: [
           [sequelize.fn('DATE', sequelize.col('tanggal')), 'date'],
           [sequelize.fn('SUM', sequelize.col('jumlah')), 'total']
-        ],
-        group: [sequelize.fn('DATE', sequelize.col('tanggal')), 'Barang.id', 'Barang.nama_barang'],
+        ],        group: [sequelize.fn('DATE', sequelize.col('tanggal')), 'Barang.id_barang', 'Barang.nama_barang'],
         order: [[sequelize.fn('DATE', sequelize.col('tanggal')), 'ASC']]
       });
 

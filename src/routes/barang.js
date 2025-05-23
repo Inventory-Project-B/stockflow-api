@@ -7,11 +7,11 @@ const upload = require('../middleware/upload');
 // Public routes
 router.get('/', barangController.getAllBarang);
 router.get('/chart', barangController.getChartData);
-router.get('/:id', barangController.getBarangById);
+router.get('/:id_barang', barangController.getBarangById);
 
 // Protected routes
 router.post('/', auth, upload.single('foto'), barangController.createBarang);
-router.put('/:id', auth, upload.single('foto'), barangController.updateBarang);
-router.delete('/:id', auth, barangController.deleteBarang);
+router.put('/:id_barang', auth, upload.single('foto'), barangController.updateBarang);
+router.delete('/:id_barang', auth, barangController.deleteBarang);
 
 module.exports = router;

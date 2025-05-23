@@ -1,6 +1,7 @@
 const Barang = require('../models/barang');
 const path = require('path');
 const fs = require('fs');
+const sequelize = require('sequelize');
 
 const barangController = {
   // Get all barang
@@ -19,11 +20,10 @@ const barangController = {
       });
     }
   },
-
   // Get single barang
   getBarangById: async (req, res) => {
     try {
-      const barang = await Barang.findByPk(req.params.id);
+      const barang = await Barang.findByPk(req.params.id_barang);
       if (!barang) {
         return res.status(404).json({
           success: false,
@@ -77,7 +77,7 @@ const barangController = {
   // Update barang
   updateBarang: async (req, res) => {
     try {
-      const barang = await Barang.findByPk(req.params.id);
+      const barang = await Barang.findByPk(req.params.id_barang);
       if (!barang) {
         return res.status(404).json({
           success: false,
@@ -124,7 +124,7 @@ const barangController = {
   // Delete barang
   deleteBarang: async (req, res) => {
     try {
-      const barang = await Barang.findByPk(req.params.id);
+      const barang = await Barang.findByPk(req.params.id_barang);
       if (!barang) {
         return res.status(404).json({
           success: false,
@@ -159,7 +159,7 @@ const barangController = {
   getChartData: async (req, res) => {
     try {
       const barangData = await Barang.findAll({
-        attributes: ['kategori', [sequelize.fn('COUNT', sequelize.col('id')), 'count']],
+        attributes: ['kategori', [sequelize.fn('COUNT', sequelize.col('id_barang')), 'count']],
         group: ['kategori']
       });
 
