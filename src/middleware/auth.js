@@ -9,9 +9,12 @@ const verifyToken = (req, res, next) => {
       message: 'No token provided'
     });
   }
-
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET, {
+      algorithms: ['HS256'],
+      issuer: 'stockflow-api',
+      audience: 'stockflow-client'
+    });
     req.user = decoded;
     next();
   } catch (error) {
