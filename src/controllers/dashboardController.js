@@ -168,16 +168,16 @@ const dashboardController = {
     try {
       // Total barang
       const totalBarang = await Barang.count();
-      
+
       // Total stok
       const totalStok = await Barang.sum('stok');
-      
+
       // Total barang masuk hari ini
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const tomorrow = new Date(today);
       tomorrow.setDate(tomorrow.getDate() + 1);
-      
+
       const totalMasukHariIni = await BarangMasuk.sum('jumlah', {
         where: {
           tanggal: {
@@ -185,7 +185,7 @@ const dashboardController = {
           }
         }
       }) || 0;
-      
+
       // Total barang keluar hari ini
       const totalKeluarHariIni = await BarangKeluar.sum('jumlah', {
         where: {
@@ -194,16 +194,16 @@ const dashboardController = {
           }
         }
       }) || 0;
-      
+
       // Total nilai barang
       const barangList = await Barang.findAll({
         attributes: ['stok', 'harga']
       });
-      
+
       const totalNilai = barangList.reduce((total, item) => {
         return total + (parseFloat(item.harga) * item.stok);
       }, 0);
-      
+
       res.json({
         success: true,
         data: {

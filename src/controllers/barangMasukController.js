@@ -28,7 +28,8 @@ const barangMasukController = {
   createBarangMasuk: async (req, res) => {
     const t = await sequelize.transaction();
 
-    try {      const { id_barang, jumlah } = req.body;
+    try {
+      const { id_barang, jumlah } = req.body;
 
       // Create barang masuk record
       const barangMasuk = await BarangMasuk.create({

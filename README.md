@@ -1,19 +1,23 @@
 # Stockflow API Documentation
 
 ## Overview
+
 Stockflow API adalah sistem manajemen inventaris yang menyediakan API untuk mengelola barang, transaksi barang masuk, dan barang keluar.
 
 ## Base URL
+
 ```
 http://localhost:5000/api
 ```
 
 ## Authentication
+
 API ini menggunakan JWT (JSON Web Token) untuk autentikasi. Token harus disertakan di header untuk protected routes.
 
 ### Auth Endpoints
 
 #### 1. Register
+
 ```http
 POST /auth/register
 Content-Type: application/json
@@ -24,7 +28,7 @@ Content-Type: application/json
     "role": "string" (optional, default: "user")
 }
 
-Response: 
+Response:
 {
     "success": true,
     "message": "User registered successfully"
@@ -32,6 +36,7 @@ Response:
 ```
 
 #### 2. Login
+
 ```http
 POST /auth/login
 Content-Type: application/json
@@ -55,7 +60,9 @@ Response:
 ```
 
 ## Protected Routes
+
 Untuk protected routes, sertakan token di header:
+
 ```http
 Authorization: Bearer your_jwt_token
 ```
@@ -63,6 +70,7 @@ Authorization: Bearer your_jwt_token
 ### Barang Endpoints
 
 #### 1. Get All Barang
+
 ```http
 GET /barang
 
@@ -83,6 +91,7 @@ Response:
 ```
 
 #### 2. Get Barang by ID
+
 ```http
 GET /barang/:id
 
@@ -101,6 +110,7 @@ Response:
 ```
 
 #### 3. Create Barang (Protected)
+
 ```http
 POST /barang
 Content-Type: multipart/form-data
@@ -128,6 +138,7 @@ Response:
 ```
 
 #### 4. Update Barang (Protected)
+
 ```http
 PUT /barang/:id
 Content-Type: multipart/form-data
@@ -155,6 +166,7 @@ Response:
 ```
 
 #### 5. Delete Barang (Protected)
+
 ```http
 DELETE /barang/:id
 
@@ -168,6 +180,7 @@ Response:
 ### Barang Masuk Endpoints
 
 #### 1. Get All Barang Masuk (Protected)
+
 ```http
 GET /barang-masuk
 
@@ -188,6 +201,7 @@ Response:
 ```
 
 #### 2. Create Barang Masuk (Protected)
+
 ```http
 POST /barang-masuk
 Content-Type: application/json
@@ -212,6 +226,7 @@ Response:
 ### Barang Keluar Endpoints
 
 #### 1. Get All Barang Keluar (Protected)
+
 ```http
 GET /barang-keluar
 
@@ -233,6 +248,7 @@ Response:
 ```
 
 #### 2. Create Barang Keluar (Protected)
+
 ```http
 POST /barang-keluar
 Content-Type: application/json
@@ -257,6 +273,7 @@ Response:
 ```
 
 #### 3. Get Chart Data Barang Keluar
+
 ```http
 GET /barang-keluar/chart?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD
 
@@ -277,14 +294,16 @@ Response:
 ```
 
 ## Error Responses
+
 ```json
 {
-    "success": false,
-    "message": "Error message description"
+  "success": false,
+  "message": "Error message description"
 }
 ```
 
 Common error codes:
+
 - 400: Bad Request
 - 401: Unauthorized
 - 403: Forbidden
@@ -294,6 +313,7 @@ Common error codes:
 ### Dashboard Endpoints
 
 #### 1. Get Dashboard Summary (Protected)
+
 ```http
 GET /dashboard/summary
 
@@ -311,6 +331,7 @@ Response:
 ```
 
 #### 2. Get Barang by Kategori Chart
+
 ```http
 GET /dashboard/chart/barang
 
@@ -335,6 +356,7 @@ Response:
 ```
 
 #### 3. Get Barang Masuk Chart
+
 ```http
 GET /dashboard/chart/barang-masuk?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD
 
@@ -355,6 +377,7 @@ Response:
 ```
 
 #### 4. Get Barang Keluar Chart
+
 ```http
 GET /dashboard/chart/barang-keluar?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD
 
@@ -377,25 +400,30 @@ Response:
 ## Flow Penggunaan API
 
 ### 1. Setup Awal
+
 1. Register user baru
 2. Login untuk mendapatkan token
 3. Gunakan token untuk akses protected routes
 
 ### 2. Manajemen Barang
+
 1. Create barang baru (dengan foto)
 2. Get list barang untuk mendapatkan ID barang
 
 ### 3. Transaksi Barang Masuk
+
 1. Create barang masuk dengan id_barang yang valid
 2. Stok barang akan otomatis bertambah
 
 ### 4. Transaksi Barang Keluar
+
 1. Create barang keluar dengan id_barang yang valid
 2. Sistem akan mengecek stok mencukupi
 3. Jumlah harga akan dihitung otomatis
 4. Stok barang akan otomatis berkurang
 
 ### 5. Monitoring
+
 1. Akses dashboard endpoints untuk visualisasi data
 2. Gunakan filter tanggal untuk melihat data dalam rentang waktu tertentu
 3. Lihat ringkasan dashboard untuk informasi keseluruhan stok dan transaksi

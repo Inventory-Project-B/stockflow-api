@@ -7,7 +7,8 @@ const barangKeluarController = {
   // Get all barang keluar
   getAllBarangKeluar: async (req, res) => {
     try {
-      const barangKeluar = await BarangKeluar.findAll({        include: [
+      const barangKeluar = await BarangKeluar.findAll({
+        include: [
           { model: Barang, attributes: ['nama_barang', 'harga'] }
         ]
       });
@@ -28,7 +29,8 @@ const barangKeluarController = {
   createBarangKeluar: async (req, res) => {
     const t = await sequelize.transaction();
 
-    try {      const { id_barang, jumlah } = req.body;
+    try {
+      const { id_barang, jumlah } = req.body;
 
       // Check stok barang
       const barang = await Barang.findByPk(id_barang, { transaction: t });

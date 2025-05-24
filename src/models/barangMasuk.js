@@ -13,7 +13,7 @@ const BarangMasuk = sequelize.define('BarangMasuk', {
     type: DataTypes.DATE,
     allowNull: false,
     defaultValue: DataTypes.NOW
-  },  jumlah: {
+  }, jumlah: {
     type: DataTypes.INTEGER,
     allowNull: false,
     validate: {
