@@ -7,6 +7,7 @@ const authRoutes = require('./routes/auth');
 const barangRoutes = require('./routes/barang');
 const barangMasukRoutes = require('./routes/barangMasuk');
 const barangKeluarRoutes = require('./routes/barangKeluar');
+const dashboardRoutes = require('./routes/dashboard');
 
 // Load environment variables
 dotenv.config();
@@ -23,6 +24,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/barang', barangRoutes);
 app.use('/api/barang-masuk', barangMasukRoutes);
 app.use('/api/barang-keluar', barangKeluarRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // Basic route for testing
 app.get('/', (req, res) => {

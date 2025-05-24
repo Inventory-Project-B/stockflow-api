@@ -238,7 +238,7 @@ POST /barang-keluar
 Content-Type: application/json
 
 {
-    "barang_id": number,
+    "id_barang": number,
     "jumlah": number
 }
 
@@ -291,6 +291,89 @@ Common error codes:
 - 404: Not Found
 - 500: Internal Server Error
 
+### Dashboard Endpoints
+
+#### 1. Get Dashboard Summary (Protected)
+```http
+GET /dashboard/summary
+
+Response:
+{
+    "success": true,
+    "data": {
+        "totalBarang": number,
+        "totalStok": number,
+        "totalMasukHariIni": number,
+        "totalKeluarHariIni": number,
+        "totalNilai": number
+    }
+}
+```
+
+#### 2. Get Barang by Kategori Chart
+```http
+GET /dashboard/chart/barang
+
+Response:
+{
+    "success": true,
+    "data": {
+        "labels": ["Elektronik", "Pakaian", "Makanan", ...],
+        "datasets": [{
+            "label": "Jumlah Barang per Kategori",
+            "data": [10, 15, 8, ...],
+            "backgroundColor": [
+                "#FF6384",
+                "#36A2EB",
+                "#FFCE56",
+                "#4BC0C0",
+                "#9966FF"
+            ]
+        }]
+    }
+}
+```
+
+#### 3. Get Barang Masuk Chart
+```http
+GET /dashboard/chart/barang-masuk?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD
+
+Response:
+{
+    "success": true,
+    "data": {
+        "labels": ["YYYY-MM-DD", ...],
+        "datasets": [{
+            "label": "Jumlah Barang Masuk per Hari",
+            "data": [50, 45, 60, ...],
+            "fill": false,
+            "borderColor": "#36A2EB",
+            "tension": 0.1
+        }]
+    }
+}
+```
+
+#### 4. Get Barang Keluar Chart
+```http
+GET /dashboard/chart/barang-keluar?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD
+
+Response:
+{
+    "success": true,
+    "data": {
+        "labels": ["YYYY-MM-DD", ...],
+        "datasets": [{
+            "label": "Jumlah Barang Keluar per Hari",
+            "data": [30, 25, 40, ...],
+            "fill": false,
+            "borderColor": "#FF6384",
+            "tension": 0.1
+        }]
+    }
+}
+```
+
 ## Flow Penggunaan API
 
 ### 1. Setup Awal
@@ -303,15 +386,16 @@ Common error codes:
 2. Get list barang untuk mendapatkan ID barang
 
 ### 3. Transaksi Barang Masuk
-1. Create barang masuk dengan barang_id yang valid
+1. Create barang masuk dengan id_barang yang valid
 2. Stok barang akan otomatis bertambah
 
 ### 4. Transaksi Barang Keluar
-1. Create barang keluar dengan barang_id yang valid
+1. Create barang keluar dengan id_barang yang valid
 2. Sistem akan mengecek stok mencukupi
 3. Jumlah harga akan dihitung otomatis
 4. Stok barang akan otomatis berkurang
 
 ### 5. Monitoring
-1. Get chart data untuk visualisasi barang keluar
-2. Filter data berdasarkan range tanggal
+1. Akses dashboard endpoints untuk visualisasi data
+2. Gunakan filter tanggal untuk melihat data dalam rentang waktu tertentu
+3. Lihat ringkasan dashboard untuk informasi keseluruhan stok dan transaksi

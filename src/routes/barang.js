@@ -6,7 +6,6 @@ const upload = require('../middleware/upload');
 
 // Public routes
 router.get('/', barangController.getAllBarang);
-router.get('/chart', barangController.getChartData);
 router.get('/:id_barang', barangController.getBarangById);
 
 // Protected routes

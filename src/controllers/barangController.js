@@ -120,7 +120,6 @@ const barangController = {
       });
     }
   },
-
   // Delete barang
   deleteBarang: async (req, res) => {
     try {
@@ -145,44 +144,6 @@ const barangController = {
       res.json({
         success: true,
         message: 'Barang deleted successfully'
-      });
-    } catch (error) {
-      console.error('Error:', error);
-      res.status(500).json({
-        success: false,
-        message: error.message || 'Internal server error'
-      });
-    }
-  },
-
-  // Get chart data
-  getChartData: async (req, res) => {
-    try {
-      const barangData = await Barang.findAll({
-        attributes: ['kategori', [sequelize.fn('COUNT', sequelize.col('id_barang')), 'count']],
-        group: ['kategori']
-      });
-
-      // Format data untuk chart
-      const labels = barangData.map(item => item.kategori);
-      const data = barangData.map(item => item.count);
-
-      res.json({
-        success: true,
-        data: {
-          labels,
-          datasets: [{
-            label: 'Jumlah Barang per Kategori',
-            data,
-            backgroundColor: [
-              '#FF6384',
-              '#36A2EB',
-              '#FFCE56',
-              '#4BC0C0',
-              '#9966FF'
-            ]
-          }]
-        }
       });
     } catch (error) {
       console.error('Error:', error);
