@@ -1,12 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const barangMasukController = require('../controllers/barangMasukController');
-const { authenticateToken } = require('../middleware/auth');
+const auth = require('../middleware/auth');
 
-// Routes untuk barang masuk
-router.get('/', authenticateToken, barangMasukController.getAllBarangMasuk);
-router.get('/:id', authenticateToken, barangMasukController.getBarangMasukById);
-router.post('/', authenticateToken, barangMasukController.createBarangMasuk);
-router.delete('/:id', authenticateToken, barangMasukController.deleteBarangMasuk);
+router.get('/', auth, barangMasukController.getAllBarangMasuk);
+router.post('/', auth, barangMasukController.createBarangMasuk);
+router.get('/chart', auth, barangMasukController.getChartData);
 
 module.exports = router;

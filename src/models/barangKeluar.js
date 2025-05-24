@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 const Barang = require('./barang');
+const User = require('./user');
 
 const BarangKeluar = sequelize.define('BarangKeluar', {
   id_bk: {
@@ -10,43 +11,23 @@ const BarangKeluar = sequelize.define('BarangKeluar', {
   },
   tanggal: {
     type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
     allowNull: false,
-  },
-  jumlah_keluar: {
+    defaultValue: DataTypes.NOW
+  },  jumlah: {
     type: DataTypes.INTEGER,
     allowNull: false,
     validate: {
-      min: 1,
-    },
+      min: 1
+    }
   },
   jumlah_harga: {
     type: DataTypes.DECIMAL(10, 2),
-    allowNull: false,
-    defaultValue: 0,
-  },
-  id_barang: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: Barang,
-      key: 'id_barang',
-    },
-  },
-}, {
-  tableName: 'barang_keluar',
-  timestamps: true,
+    allowNull: false
+  }
 });
 
-// Definisi hubungan
-BarangKeluar.belongsTo(Barang, {
-  foreignKey: 'id_barang',
-  as: 'barang',
-});
-
-Barang.hasMany(BarangKeluar, {
-  foreignKey: 'id_barang',
-  as: 'barang_keluar',
-});
+// Relationships
+BarangKeluar.belongsTo(Barang, { foreignKey: 'id_barang' });
+BarangKeluar.belongsTo(User, { foreignKey: 'user_id' });
 
 module.exports = BarangKeluar;

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const authenticateToken = (req, res, next) => {
+const verifyToken = (req, res, next) => {
   const token = req.headers['authorization']?.split(' ')[1];
 
   if (!token) {
@@ -9,9 +9,12 @@ const authenticateToken = (req, res, next) => {
       message: 'No token provided'
     });
   }
-
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET, {
+      algorithms: ['HS256'],
+      issuer: 'stockflow-api',
+      audience: 'stockflow-client'
+    });
     req.user = decoded;
     next();
   } catch (error) {
@@ -22,4 +25,4 @@ const authenticateToken = (req, res, next) => {
   }
 };
 
-module.exports = { authenticateToken };
+module.exports = verifyToken;
