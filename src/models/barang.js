@@ -1,7 +1,8 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 
-const Barang = sequelize.define('Barang', {  id_barang: {
+const Barang = sequelize.define('Barang', {
+  id_barang: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,

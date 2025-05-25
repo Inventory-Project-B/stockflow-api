@@ -5,6 +5,5 @@ const auth = require('../middleware/auth');
 
 router.get('/', auth, barangKeluarController.getAllBarangKeluar);
 router.post('/', auth, barangKeluarController.createBarangKeluar);
-router.get('/chart', auth, barangKeluarController.getChartData);
 
 module.exports = router;
