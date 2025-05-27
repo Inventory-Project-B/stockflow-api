@@ -87,7 +87,7 @@ const authController = {
           issuer: 'stockflow-api', // Who issued the token
           audience: 'stockflow-client' // Who the token is intended for
         }
-      );      res.json({
+      ); res.json({
         success: true,
         message: 'Login successful',
         token: token,
