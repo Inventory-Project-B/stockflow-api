@@ -8,7 +8,16 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, `barang-${uniqueSuffix}${path.extname(file.originalname)}`);
+    
+    // Prefix berdasarkan tipe upload
+    let prefix = 'file';
+    if (req.baseUrl.includes('barang')) {
+      prefix = 'barang';
+    } else if (req.baseUrl.includes('profile')) {
+      prefix = 'profile';
+    }
+    
+    cb(null, `${prefix}-${uniqueSuffix}${path.extname(file.originalname)}`);
   }
 });
 
