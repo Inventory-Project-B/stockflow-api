@@ -22,12 +22,12 @@ const authController = {
           success: false,
           message: 'Username already exists'
         });
-      }
-
-      // Create new user
+      }      // Create new user
       const user = await User.create({
         username,
         password,
+        email: req.body.email,
+        nama_lengkap: req.body.nama_lengkap,
         role: role || 'user'
       });
 
@@ -94,11 +94,8 @@ const authController = {
         message: 'Login successful',
         token: token,
         user: {
-          id_admin: user.id_admin,
+          id: user.id,
           username: user.username,
-          nama_lengkap: user.nama_lengkap,
-          email: user.email,
-          foto: user.foto,
           role: user.role
         }
       });

@@ -8,6 +8,7 @@ const barangRoutes = require('./routes/barang');
 const barangMasukRoutes = require('./routes/barangMasuk');
 const barangKeluarRoutes = require('./routes/barangKeluar');
 const dashboardRoutes = require('./routes/dashboard');
+const profileRoutes = require('./routes/profile');
 
 // Load environment variables
 dotenv.config();
