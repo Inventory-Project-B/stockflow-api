@@ -26,6 +26,7 @@ app.use('/api/barang', barangRoutes);
 app.use('/api/barang-masuk', barangMasukRoutes);
 app.use('/api/barang-keluar', barangKeluarRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/profile', profileRoutes);
 
 // Basic route for testing
 app.get('/', (req, res) => {
