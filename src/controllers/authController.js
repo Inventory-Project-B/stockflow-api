@@ -76,7 +76,7 @@ const authController = {
       }      // Generate JWT token with best practices
       const token = jwt.sign(
         {
-          id: user.id,
+          id_admin: user.id_admin,
           username: user.username,
           role: user.role
         },
@@ -94,8 +94,11 @@ const authController = {
         message: 'Login successful',
         token: token,
         user: {
-          id: user.id,
+          id_admin: user.id_admin,
           username: user.username,
+          nama_lengkap: user.nama_lengkap,
+          email: user.email,
+          foto: user.foto,
           role: user.role
         }
       });

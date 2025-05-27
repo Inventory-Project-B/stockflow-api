@@ -2,10 +2,16 @@
 const { sequelize } = require('./config/database');
 
 // Import all models to ensure they're registered with Sequelize
-require('./models/user');
-require('./models/barang');
-require('./models/barangMasuk');
-require('./models/barangKeluar');
+const User = require('./models/user');
+const Barang = require('./models/barang');
+const BarangMasuk = require('./models/barangMasuk');
+const BarangKeluar = require('./models/barangKeluar');
+
+// Log models to verify correct structure
+console.log('User model attributes:', Object.keys(User.getAttributes()));
+console.log('Barang model attributes:', Object.keys(Barang.getAttributes()));
+console.log('BarangMasuk model attributes:', Object.keys(BarangMasuk.getAttributes()));
+console.log('BarangKeluar model attributes:', Object.keys(BarangKeluar.getAttributes()));
 
 const syncDB = async () => {
   try {
