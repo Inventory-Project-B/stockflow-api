@@ -157,6 +157,59 @@ const profileController = {
         message: error.message || 'Internal server error'
       });
     }
+  },
+
+  // Upload profile photo
+  uploadPhoto: async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({
+          success: false,
+          message: 'No file uploaded'
+        });
+      }
+
+      const user = await User.findByPk(req.user.id_admin);
+      if (!user) {
+        // Delete uploaded file if user not found
+        fs.unlinkSync(path.join(__dirname, '../../uploads', req.file.filename));
+        return res.status(404).json({
+          success: false,
+          message: 'User not found'
+        });
+      }
+
+      // Delete old photo if exists
+      if (user.foto) {
+        const oldPath = path.join(__dirname, '../../uploads', user.foto);
+        if (fs.existsSync(oldPath)) {
+          fs.unlinkSync(oldPath);
+        }
+      }
+
+      // Update user with new photo
+      await user.update({
+        foto: req.file.filename
+      });
+
+      res.json({
+        success: true,
+        message: 'Profile photo uploaded successfully',
+        data: {
+          foto: req.file.filename
+        }
+      });
+    } catch (error) {
+      // Delete uploaded file if there was an error
+      if (req.file) {
+        fs.unlinkSync(path.join(__dirname, '../../uploads', req.file.filename));
+      }
+      console.error('Error uploading profile photo:', error);
+      res.status(500).json({
+        success: false,
+        message: error.message || 'Internal server error'
+      });
+    }
   }
 };
 
