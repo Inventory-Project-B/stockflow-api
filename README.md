@@ -52,9 +52,12 @@ Response:
     "message": "Login successful",
     "token": "JWT_TOKEN",
     "user": {
-        "id": number,
+        "id_admin": number,
         "username": "string",
-        "role": "string"
+        "nama_lengkap": "string",
+        "email": "string",
+        "role": "string",
+        "foto": "string"
     }
 }
 ```
@@ -76,12 +79,11 @@ GET /barang
 
 Response:
 {
-    "success": true,
-    "data": [
+    "success": true,    "data": [
         {
-            "id": number,
+            "id_barang": number,
             "nama_barang": "string",
-            "deskripsi": "string",
+            "kategori": "string",
             "harga": number,
             "stok": number,
             "foto": "string"
@@ -99,9 +101,9 @@ Response:
 {
     "success": true,
     "data": {
-        "id": number,
+        "id_barang": number,
         "nama_barang": "string",
-        "deskripsi": "string",
+        "kategori": "string",
         "harga": number,
         "stok": number,
         "foto": "string"
@@ -117,7 +119,7 @@ Content-Type: multipart/form-data
 
 Form Data:
 - nama_barang: string
-- deskripsi: string
+- kategori: string
 - harga: number
 - stok: number
 - foto: file
@@ -127,9 +129,9 @@ Response:
     "success": true,
     "message": "Barang created successfully",
     "data": {
-        "id": number,
+        "id_barang": number,
         "nama_barang": "string",
-        "deskripsi": "string",
+        "kategori": "string",
         "harga": number,
         "stok": number,
         "foto": "string"
@@ -145,7 +147,7 @@ Content-Type: multipart/form-data
 
 Form Data:
 - nama_barang: string (optional)
-- deskripsi: string (optional)
+- kategori: string (optional)
 - harga: number (optional)
 - stok: number (optional)
 - foto: file (optional)
@@ -155,9 +157,9 @@ Response:
     "success": true,
     "message": "Barang updated successfully",
     "data": {
-        "id": number,
+        "id_barang": number,
         "nama_barang": "string",
-        "deskripsi": "string",
+        "kategori": "string",
         "harga": number,
         "stok": number,
         "foto": "string"
@@ -261,10 +263,9 @@ Content-Type: application/json
 Response:
 {
     "success": true,
-    "message": "Barang keluar recorded successfully",
-    "data": {
-        "id": number,
-        "barang_id": number,
+    "message": "Barang keluar recorded successfully",    "data": {
+        "id_bk": number,
+        "id_barang": number,
         "jumlah": number,
         "jumlah_harga": number,
         "tanggal": "datetime"
@@ -339,7 +340,7 @@ Response:
 {
     "success": true,
     "data": {
-        "labels": ["Elektronik", "Pakaian", "Makanan", ...],
+        "labels": ["Daster", "Gamis", "Kaftan", ...],
         "datasets": [{
             "label": "Jumlah Barang per Kategori",
             "data": [10, 15, 8, ...],
@@ -427,3 +428,88 @@ Response:
 1. Akses dashboard endpoints untuk visualisasi data
 2. Gunakan filter tanggal untuk melihat data dalam rentang waktu tertentu
 3. Lihat ringkasan dashboard untuk informasi keseluruhan stok dan transaksi
+
+### Profile Endpoints
+
+#### 1. Get Profile (Protected)
+
+```http
+GET /profile
+
+Response:
+{
+    "success": true,
+    "data": {
+        "id_admin": number,
+        "nama_lengkap": "string",
+        "username": "string",
+        "email": "string",
+        "foto": "string",
+        "role": "string"
+    }
+}
+```
+
+#### 2. Update Profile (Protected)
+
+```http
+PUT /profile
+Content-Type: multipart/form-data
+
+Form Data:
+- nama_lengkap: string (optional)
+- username: string (optional)
+- email: string (optional)
+- foto: file (optional)
+
+Response:
+{
+    "success": true,
+    "message": "Profile updated successfully",
+    "data": {
+        "id_admin": number,
+        "nama_lengkap": "string",
+        "username": "string",
+        "email": "string",
+        "foto": "string",
+        "role": "string"
+    }
+}
+```
+
+#### 3. Change Password (Protected)
+
+```http
+PUT /profile/change-password
+Content-Type: application/json
+
+{
+    "oldPassword": "string",
+    "newPassword": "string"
+}
+
+Response:
+{
+    "success": true,
+    "message": "Password changed successfully"
+}
+```
+
+#### 4. Upload Profile Photo (Protected)
+
+```http
+POST /profile/photo
+Content-Type: multipart/form-data
+
+Form Data:
+- foto: file
+
+Response:
+{
+    "success": true,
+    "message": "Profile photo uploaded successfully",
+    "data": {
+        "foto": "string"
+    }
+}
+```

@@ -22,12 +22,12 @@ const authController = {
           success: false,
           message: 'Username already exists'
         });
-      }
-
-      // Create new user
+      }      // Create new user
       const user = await User.create({
         username,
         password,
+        email: req.body.email,
+        nama_lengkap: req.body.nama_lengkap,
         role: role || 'user'
       });
 
@@ -76,7 +76,7 @@ const authController = {
       }      // Generate JWT token with best practices
       const token = jwt.sign(
         {
-          id: user.id,
+          id_admin: user.id_admin,
           username: user.username,
           role: user.role
         },
@@ -87,16 +87,17 @@ const authController = {
           issuer: 'stockflow-api', // Who issued the token
           audience: 'stockflow-client' // Who the token is intended for
         }
-      );
-
-      res.json({
+      ); res.json({
         success: true,
         message: 'Login successful',
         token: token,
         user: {
-          id: user.id,
+          id_admin: user.id_admin,
           username: user.username,
-          role: user.role
+          nama_lengkap: user.nama_lengkap,
+          email: user.email,
+          role: user.role,
+          foto: user.foto
         }
       });
     } catch (error) {
