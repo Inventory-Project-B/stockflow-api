@@ -1,16 +1,35 @@
-const express = require('express');
+// const express = require("express");
+// const {
+//   getBarang,
+//   addBarang,
+//   updateBarang,
+//   deleteBarang,
+// } = require("../controllers/barangController");
+// const authMiddleware = require("../middlewares/authMiddleware");
+// const router = express.Router();
+
+// router.get("/", authMiddleware, getBarang);
+// router.post("/", authMiddleware, addBarang);
+// router.put("/:id", authMiddleware, updateBarang);
+// router.delete("/:id", authMiddleware, deleteBarang);
+
+// module.exports = router;
+
+const express = require("express");
 const router = express.Router();
-const barangController = require('../controllers/barangController');
-const auth = require('../middleware/auth');
-const upload = require('../middleware/upload');
+const barangController = require("../controllers/barangController");
 
-// Public routes
-router.get('/', barangController.getAllBarang);
-router.get('/:id_barang', barangController.getBarangById);
-
-// Protected routes
-router.post('/', auth, upload.single('foto'), barangController.createBarang);
-router.put('/:id_barang', auth, upload.single('foto'), barangController.updateBarang);
-router.delete('/:id_barang', auth, barangController.deleteBarang);
+router.get("/", barangController.getBarang);
+router.post(
+  "/",
+  barangController.uploadFoto, // Middleware upload
+  barangController.addBarang
+);
+router.put(
+  "/:id_barang",
+  barangController.uploadFoto, // Middleware upload
+  barangController.updateBarang
+);
+router.delete("/:id_barang", barangController.deleteBarang);
 
 module.exports = router;

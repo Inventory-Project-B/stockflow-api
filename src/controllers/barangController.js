@@ -1,158 +1,186 @@
-const Barang = require('../models/barang');
-const path = require('path');
-const fs = require('fs');
-const sequelize = require('sequelize');
+const db = require("../database");
+const upload = require("../config/multer");
 
-const barangController = {
-  // Get all barang
-  getAllBarang: async (req, res) => {
-    try {
-      const barang = await Barang.findAll();
-      res.json({
-        success: true,
-        data: barang
-      });
-    } catch (error) {
-      console.error('Error:', error);
-      res.status(500).json({
-        success: false,
-        message: error.message || 'Internal server error'
-      });
-    }
-  },
-  // Get single barang
-  getBarangById: async (req, res) => {
-    try {
-      const barang = await Barang.findByPk(req.params.id_barang);
-      if (!barang) {
-        return res.status(404).json({
-          success: false,
-          message: 'Barang not found'
-        });
-      }
-      res.json({
-        success: true,
-        data: barang
-      });
-    } catch (error) {
-      console.error('Error:', error);
-      res.status(500).json({
-        success: false,
-        message: error.message || 'Internal server error'
-      });
-    }
-  },
+exports.getBarang = async (req, res) => {
+  try {
+    const [barang] = await db.query("SELECT * FROM barang");
+    // Tambahkan path lengkap untuk foto jika perlu
+    const barangWithFotoUrl = barang.map((item) => ({
+      ...item,
+      foto: item.foto
+        ? `${req.protocol}://${req.get("host")}/uploads/${item.foto}`
+        : null,
+    }));
+    res.json(barangWithFotoUrl);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
-  // Create barang
-  createBarang: async (req, res) => {
-    try {
-      const { nama_barang, stok, harga, kategori } = req.body;
-      const foto = req.file ? req.file.filename : null;
+// Middleware untuk handle upload
+exports.uploadFoto = upload.single("foto");
 
-      const barang = await Barang.create({
+exports.addBarang = async (req, res) => {
+  const { nama_barang, kategori, stok, harga } = req.body;
+
+  try {
+    const foto = req.file ? req.file.filename : null;
+
+    await db.query(
+      "INSERT INTO barang (nama_barang, kategori, stok, harga, foto) VALUES (?, ?, ?, ?, ?)",
+      [nama_barang, kategori || null, stok || 0, harga || 0, foto]
+    );
+
+    res.status(201).json({
+      message: "Barang berhasil ditambahkan",
+      data: {
         nama_barang,
+        kategori,
         stok,
         harga,
-        kategori,
-        foto
-      });
-
-      res.status(201).json({
-        success: true,
-        message: 'Barang created successfully',
-        data: barang
-      });
-    } catch (error) {
-      if (req.file) {
-        fs.unlinkSync(path.join(__dirname, '../../uploads', req.file.filename));
-      }
-      console.error('Error:', error);
-      res.status(500).json({
-        success: false,
-        message: error.message || 'Internal server error'
-      });
+        foto,
+      },
+    });
+  } catch (err) {
+    // Hapus file yang sudah diupload jika terjadi error
+    if (req.file) {
+      const fs = require("fs");
+      fs.unlinkSync(`public/uploads/${req.file.filename}`);
     }
-  },
+    res.status(500).json({ error: err.message });
+  }
+};
 
-  // Update barang
-  updateBarang: async (req, res) => {
-    try {
-      const barang = await Barang.findByPk(req.params.id_barang);
-      if (!barang) {
-        return res.status(404).json({
-          success: false,
-          message: 'Barang not found'
-        });
-      }
+exports.getBarangById = async (req, res) => {
+  const { id_barang } = req.params;
+  try {
+    const [[barang]] = await db.query(
+      "SELECT * FROM barang WHERE id_barang = ?",
+      [id_barang]
+    );
 
-      const { nama_barang, stok, harga, kategori } = req.body;
-      const foto = req.file ? req.file.filename : barang.foto;
+    if (!barang) {
+      return res.status(404).json({ message: "Barang tidak ditemukan" });
+    }
 
-      // If new file uploaded, delete old file
-      if (req.file && barang.foto) {
-        const oldPath = path.join(__dirname, '../../uploads', barang.foto);
+    // Tambahkan path lengkap untuk foto jika perlu
+    if (barang.foto) {
+      barang.foto = `${req.protocol}://${req.get("host")}/uploads/${barang.foto}`;
+    }
+
+    res.json(barang);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.updateBarang = async (req, res) => {
+  const { id_barang } = req.params;
+  const { nama_barang, kategori, stok, harga } = req.body;
+  try {
+    // Cek apakah barang ada
+    const [[barang]] = await db.query(
+      "SELECT * FROM barang WHERE id_barang = ?",
+      [id_barang]
+    );
+
+    if (!barang) {
+      return res.status(404).json({ message: "Barang tidak ditemukan" });
+    }
+
+    // Handle jika ada upload foto baru
+    let foto = barang.foto;
+    if (req.file) {
+      foto = req.file.filename;
+      // Hapus foto lama jika ada
+      if (barang.foto) {
+        const fs = require("fs");
+        const path = require("path");
+        const oldPath = path.join(__dirname, "../../public/uploads", barang.foto);
         if (fs.existsSync(oldPath)) {
           fs.unlinkSync(oldPath);
         }
       }
-
-      await barang.update({
-        nama_barang,
-        stok,
-        harga,
-        kategori,
-        foto
-      });
-
-      res.json({
-        success: true,
-        message: 'Barang updated successfully',
-        data: barang
-      });
-    } catch (error) {
-      if (req.file) {
-        fs.unlinkSync(path.join(__dirname, '../../uploads', req.file.filename));
-      }
-      console.error('Error:', error);
-      res.status(500).json({
-        success: false,
-        message: error.message || 'Internal server error'
-      });
     }
-  },
-  // Delete barang
-  deleteBarang: async (req, res) => {
-    try {
-      const barang = await Barang.findByPk(req.params.id_barang);
-      if (!barang) {
-        return res.status(404).json({
-          success: false,
-          message: 'Barang not found'
-        });
-      }
 
-      // Delete foto if exists
-      if (barang.foto) {
-        const filePath = path.join(__dirname, '../../uploads', barang.foto);
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
-        }
-      }
+    await db.query(
+      "UPDATE barang SET nama_barang = ?, kategori = ?, stok = ?, harga = ?, foto = ? WHERE id_barang = ?",
+      [
+        nama_barang || barang.nama_barang,
+        kategori !== undefined ? kategori : barang.kategori,
+        stok !== undefined ? stok : barang.stok,
+        harga !== undefined ? harga : barang.harga,
+        foto,
+        id_barang,
+      ]
+    );
 
-      await barang.destroy();
-
-      res.json({
-        success: true,
-        message: 'Barang deleted successfully'
-      });
-    } catch (error) {
-      console.error('Error:', error);
-      res.status(500).json({
-        success: false,
-        message: error.message || 'Internal server error'
-      });
+    res.json({
+      message: "Barang berhasil diperbarui",
+      data: {
+        id_barang,
+        nama_barang: nama_barang || barang.nama_barang,
+        kategori: kategori !== undefined ? kategori : barang.kategori,
+        stok: stok !== undefined ? stok : barang.stok,
+        harga: harga !== undefined ? harga : barang.harga,
+        foto,
+      },
+    });
+  } catch (err) {
+    // Hapus file yang sudah diupload jika terjadi error
+    if (req.file) {
+      const fs = require("fs");
+      fs.unlinkSync(`public/uploads/${req.file.filename}`);
     }
+    res.status(500).json({ error: err.message });
   }
 };
 
-module.exports = barangController;
+exports.deleteBarang = async (req, res) => {
+  const { id_barang } = req.params;
+  try {
+    // Cek apakah barang ada
+    const [[barang]] = await db.query(
+      "SELECT * FROM barang WHERE id_barang = ?",
+      [id_barang]
+    );
+
+    if (!barang) {
+      return res.status(404).json({ message: "Barang tidak ditemukan" });
+    }
+
+    // Cek apakah barang pernah dipakai di transaksi
+    const [[checkMasuk]] = await db.query(
+      "SELECT COUNT(*) as count FROM barang_masuk WHERE id_barang = ?",
+      [id_barang]
+    );
+
+    const [[checkKeluar]] = await db.query(
+      "SELECT COUNT(*) as count FROM barang_keluar WHERE id_barang = ?",
+      [id_barang]
+    );
+
+    if (checkMasuk.count > 0 || checkKeluar.count > 0) {
+      return res
+        .status(400)
+        .json({ message: "Barang tidak dapat dihapus karena sudah ada transaksi" });
+    }
+
+    // Hapus barang
+    await db.query("DELETE FROM barang WHERE id_barang = ?", [id_barang]);
+
+    // Hapus foto jika ada
+    if (barang.foto) {
+      const fs = require("fs");
+      const path = require("path");
+      const filePath = path.join(__dirname, "../../public/uploads", barang.foto);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+    }
+
+    res.json({ message: "Barang berhasil dihapus" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

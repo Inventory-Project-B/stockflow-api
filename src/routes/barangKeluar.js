@@ -1,9 +1,17 @@
-const express = require('express');
-const router = express.Router();
-const barangKeluarController = require('../controllers/barangKeluarController');
-const auth = require('../middleware/auth');
+const express = require("express");
+const {
+  getBarangKeluar,
+  addBarangKeluar,
+  updateBarangKeluar,
+  deleteBarangKeluar,
+} = require("../controllers/barangKeluarController");
+const authMiddleware = require("../middlewares/authMiddleware");
 
-router.get('/', auth, barangKeluarController.getAllBarangKeluar);
-router.post('/', auth, barangKeluarController.createBarangKeluar);
+const router = express.Router();
+
+router.get("/", authMiddleware, getBarangKeluar);
+router.post("/", authMiddleware, addBarangKeluar);
+router.put("/:id_bk", authMiddleware, updateBarangKeluar);
+router.delete("/:id_bk", authMiddleware, deleteBarangKeluar);
 
 module.exports = router;
