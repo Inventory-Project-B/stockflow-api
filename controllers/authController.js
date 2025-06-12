@@ -81,7 +81,7 @@ exports.login = async (req, res) => {
     if (users.length === 0) {
       return res
         .status(401)
-        .json({ message: "Email/username atau password salah" });
+        .json({ message: "Nama pengguna salah" });
     }
 
     const user = users[0];
@@ -89,7 +89,7 @@ exports.login = async (req, res) => {
     if (!isMatch) {
       return res
         .status(401)
-        .json({ message: "Email/username atau password salah" });
+        .json({ message: "Nama Pengguna/Kata Sandi Anda Salah" });
     }
 
     const token = jwt.sign(
