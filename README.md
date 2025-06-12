@@ -5,6 +5,7 @@
 StockFlow API adalah sistem manajemen inventaris untuk produk fashion seperti Daster Maura dan Gamis Hitam. API ini membantu pengelola toko untuk melacak stok barang, mengelola transaksi barang masuk dan keluar, serta memantau perkembangan penjualan melalui dashboard.
 
 ## Daftar Isi
+
 1. [Instalasi](#instalasi)
 2. [Konfigurasi](#konfigurasi)
 3. [API Endpoints](#api-endpoints)
@@ -20,17 +21,20 @@ StockFlow API adalah sistem manajemen inventaris untuk produk fashion seperti Da
 ## Instalasi
 
 1. Clone repositori ini ke komputer Anda
+
 ```bash
 git clone https://github.com/username/stockflow-api.git
 cd stockflow-api
 ```
 
 2. Install semua dependensi
+
 ```bash
 npm install
 ```
 
 3. Import database ke MySQL
+
 ```bash
 mysql -u root -p < stockflow-terbaru.sql
 ```
@@ -38,6 +42,7 @@ mysql -u root -p < stockflow-terbaru.sql
 ## Konfigurasi
 
 1. Buat file `.env` pada folder root dengan isi:
+
 ```
 PORT=5000
 JWT_SECRET=rahasia_jwt_anda
@@ -48,6 +53,7 @@ DB_NAME=stockflow-terbaru
 ```
 
 2. Jalankan aplikasi
+
 ```bash
 node server.js
 ```
@@ -174,7 +180,7 @@ Response:
   "data": {
     "id_barang": 1,
     "nama_barang": "Daster Maura",
-    "kategori": "Daster", 
+    "kategori": "Daster",
     "harga": "100000.00",
     "stok": 50,
     "foto": "foto-1749078865134-244751454.png"
@@ -544,7 +550,7 @@ Response:
 
 ### Langkah 4: Menggunakan API
 
-Semua request yang memerlukan autentikasi akan menggunakan token dari environment variabel. 
+Semua request yang memerlukan autentikasi akan menggunakan token dari environment variabel.
 Untuk mengirim request dengan token:
 
 1. Pilih request yang ingin dijalankan
@@ -557,6 +563,7 @@ Untuk mengirim request dengan token:
 ### Skenario: Mengelola Stok Daster Maura
 
 #### 1. Login Sebagai Admin
+
 ```http
 POST /auth/login
 Content-Type: application/json
@@ -568,6 +575,7 @@ Content-Type: application/json
 ```
 
 #### 2. Tambah Produk Baru
+
 ```http
 POST /barang
 Authorization: Bearer <token>
@@ -581,6 +589,7 @@ Content-Type: multipart/form-data
 ```
 
 #### 3. Tambah Stok Barang (Barang Masuk)
+
 ```http
 POST /barang-masuk
 Authorization: Bearer <token>
@@ -593,6 +602,7 @@ Content-Type: application/json
 ```
 
 #### 4. Catat Penjualan (Barang Keluar)
+
 ```http
 POST /barang-keluar
 Authorization: Bearer <token>
@@ -605,6 +615,7 @@ Content-Type: application/json
 ```
 
 #### 5. Lihat Laporan Dashboard
+
 ```http
 GET /dashboard/summary
 Authorization: Bearer <token>
