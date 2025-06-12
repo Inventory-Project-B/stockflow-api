@@ -1,317 +1,638 @@
-# Stockflow API Documentation
+# Dokumentasi API StockFlow - Toko Fashion Daster Maura
 
-## Overview
-Stockflow API adalah sistem manajemen inventaris yang menyediakan API untuk mengelola barang, transaksi barang masuk, dan barang keluar.
+## Tentang Aplikasi
 
-## Base URL
+StockFlow API adalah sistem manajemen inventaris untuk produk fashion seperti Daster Maura dan Gamis Hitam. API ini membantu pengelola toko untuk melacak stok barang, mengelola transaksi barang masuk dan keluar, serta memantau perkembangan penjualan melalui dashboard.
+
+## Daftar Isi
+
+1. [Instalasi](#instalasi)
+2. [Konfigurasi](#konfigurasi)
+3. [API Endpoints](#api-endpoints)
+   - [Autentikasi](#autentikasi)
+   - [Barang](#barang)
+   - [Barang Masuk](#barang-masuk)
+   - [Barang Keluar](#barang-keluar)
+   - [Dashboard](#dashboard)
+   - [Profil](#profil)
+4. [Panduan Pengujian di Postman](#panduan-pengujian-di-postman)
+5. [Contoh Penggunaan](#contoh-penggunaan)
+
+## Instalasi
+
+1. Clone repositori ini ke komputer Anda
+
+```bash
+git clone https://github.com/username/stockflow-api.git
+cd stockflow-api
 ```
-http://localhost:5000/api
+
+2. Install semua dependensi
+
+```bash
+npm install
 ```
 
-## Authentication
-API ini menggunakan JWT (JSON Web Token) untuk autentikasi. Token harus disertakan di header untuk protected routes.
+3. Import database ke MySQL
 
-### Auth Endpoints
+```bash
+mysql -u root -p < stockflow-terbaru.sql
+```
 
-#### 1. Register
+## Konfigurasi
+
+1. Buat file `.env` pada folder root dengan isi:
+
+```
+PORT=5000
+JWT_SECRET=rahasia_jwt_anda
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=password_database_anda
+DB_NAME=stockflow-terbaru
+```
+
+2. Jalankan aplikasi
+
+```bash
+node server.js
+```
+
+## API Endpoints
+
+Base URL: `http://localhost:5000/api`
+
+### Autentikasi
+
+#### Register User Baru
+
 ```http
 POST /auth/register
 Content-Type: application/json
 
 {
-    "username": "string",
-    "password": "string",
-    "role": "string" (optional, default: "user")
+  "nama": "Admin Toko",
+  "nama_lengkap": "Admin Toko Daster Maura",
+  "username": "admin",
+  "email": "admin@dastermaura.com",
+  "password": "password123",
+  "role": "admin"
 }
 
-Response: 
+Response:
 {
-    "success": true,
-    "message": "User registered successfully"
+  "message": "Registrasi berhasil",
+  "user": {
+    "id": 1,
+    "nama": "Admin Toko",
+    "nama_lengkap": "Admin Toko Daster Maura",
+    "username": "admin",
+    "email": "admin@dastermaura.com",
+    "role": "admin"
+  }
 }
 ```
 
-#### 2. Login
+#### Login
+
 ```http
 POST /auth/login
 Content-Type: application/json
 
 {
-    "username": "string",
-    "password": "string"
+  "email": "admin@dastermaura.com",
+  "password": "password123"
 }
 
 Response:
 {
-    "success": true,
-    "message": "Login successful",
-    "token": "JWT_TOKEN",
-    "user": {
-        "id": number,
-        "username": "string",
-        "role": "string"
-    }
+  "message": "Login berhasil",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": 1,
+    "nama": "Admin Toko",
+    "nama_lengkap": "Admin Toko Daster Maura",
+    "username": "admin",
+    "email": "admin@dastermaura.com",
+    "role": "admin",
+    "foto_profil": "http://localhost:5000/uploads/profile/profile_1.jpg"
+  }
 }
 ```
 
-## Protected Routes
-Untuk protected routes, sertakan token di header:
+#### Logout
+
 ```http
-Authorization: Bearer your_jwt_token
+POST /auth/logout
+Authorization: Bearer <token>
+
+Response:
+{
+  "message": "Logout berhasil"
+}
 ```
 
-### Barang Endpoints
+### Barang
 
-#### 1. Get All Barang
+#### Mendapatkan Semua Barang
+
 ```http
 GET /barang
+Authorization: Bearer <token>
 
 Response:
 {
-    "success": true,
-    "data": [
-        {
-            "id": number,
-            "nama_barang": "string",
-            "deskripsi": "string",
-            "harga": number,
-            "stok": number,
-            "foto": "string"
-        }
-    ]
-}
-```
-
-#### 2. Get Barang by ID
-```http
-GET /barang/:id
-
-Response:
-{
-    "success": true,
-    "data": {
-        "id": number,
-        "nama_barang": "string",
-        "deskripsi": "string",
-        "harga": number,
-        "stok": number,
-        "foto": "string"
+  "data": [
+    {
+      "id_barang": 1,
+      "nama_barang": "Daster Maura",
+      "kategori": "Daster",
+      "harga": "100000.00",
+      "stok": 50,
+      "foto": "foto-1749078865134-244751454.png"
+    },
+    {
+      "id_barang": 2,
+      "nama_barang": "Gamis Hitam",
+      "kategori": "Gamis",
+      "harga": "100000.00",
+      "stok": 30,
+      "foto": "foto-1749103504885-497885875.jpg"
     }
+  ],
+  "pagination": {
+    "total": 2,
+    "page": 1,
+    "limit": 10,
+    "totalPages": 1
+  }
 }
 ```
 
-#### 3. Create Barang (Protected)
+#### Mendapatkan Detail Barang
+
+```http
+GET /barang/:id_barang
+Authorization: Bearer <token>
+
+Response:
+{
+  "data": {
+    "id_barang": 1,
+    "nama_barang": "Daster Maura",
+    "kategori": "Daster",
+    "harga": "100000.00",
+    "stok": 50,
+    "foto": "foto-1749078865134-244751454.png"
+  }
+}
+```
+
+#### Menambah Barang Baru
+
 ```http
 POST /barang
+Authorization: Bearer <token>
 Content-Type: multipart/form-data
 
 Form Data:
-- nama_barang: string
-- kategori: enum (Daster, Gamis, Kaftan, Dress)
-- harga: number
-- stok: number
-- foto: file
+- nama_barang: "Daster Maura"
+- kategori: "Daster"
+- harga: 100000
+- stok: 0
+- foto: [file gambar]
 
 Response:
 {
-    "success": true,
-    "message": "Barang created successfully",
-    "data": {
-        "id": number,
-        "nama_barang": "string",
-        "deskripsi": "string",
-        "harga": number,
-        "stok": number,
-        "foto": "string"
-    }
+  "message": "Barang berhasil ditambahkan",
+  "data": {
+    "id_barang": 1,
+    "nama_barang": "Daster Maura",
+    "kategori": "Daster",
+    "harga": "100000.00",
+    "stok": 0,
+    "foto": "foto-1749078865134-244751454.png"
+  }
 }
 ```
 
-#### 4. Update Barang (Protected)
+#### Mengupdate Barang
+
 ```http
-PUT /barang/:id
+PUT /barang/:id_barang
+Authorization: Bearer <token>
 Content-Type: multipart/form-data
 
 Form Data:
-- nama_barang: string (optional)
-- deskripsi: string (optional)
-- harga: number (optional)
-- stok: number (optional)
-- foto: file (optional)
+- nama_barang: "Daster Maura Premium"
+- kategori: "Daster"
+- harga: 120000
+- stok: 50
+- foto: [file gambar] (opsional)
 
 Response:
 {
-    "success": true,
-    "message": "Barang updated successfully",
-    "data": {
-        "id": number,
-        "nama_barang": "string",
-        "deskripsi": "string",
-        "harga": number,
-        "stok": number,
-        "foto": "string"
-    }
+  "message": "Barang berhasil diupdate",
+  "data": {
+    "id_barang": 1,
+    "nama_barang": "Daster Maura Premium",
+    "kategori": "Daster",
+    "harga": "120000.00",
+    "stok": 50,
+    "foto": "foto-1749449187740-312989145.png"
+  }
 }
 ```
 
-#### 5. Delete Barang (Protected)
+#### Menghapus Barang
+
 ```http
-DELETE /barang/:id
+DELETE /barang/:id_barang
+Authorization: Bearer <token>
 
 Response:
 {
-    "success": true,
-    "message": "Barang deleted successfully"
+  "message": "Barang berhasil dihapus"
 }
 ```
 
-### Barang Masuk Endpoints
+### Barang Masuk
 
-#### 1. Get All Barang Masuk (Protected)
+#### Mendapatkan Semua Data Barang Masuk
+
 ```http
 GET /barang-masuk
+Authorization: Bearer <token>
 
 Response:
 {
-    "success": true,    "data": [
-        {
-            "id_bm": number,
-            "id_barang": number,
-            "jumlah": number,
-            "tanggal": "datetime",
-            "Barang": {
-                "nama_barang": "string"
-            }
-        }
-    ]
+  "data": [
+    {
+      "id_bm": 1,
+      "id_barang": 1,
+      "jumlah": 50,
+      "tanggal": "2023-06-10T08:30:00.000Z",
+      "Barang": {
+        "nama_barang": "Daster Maura"
+      }
+    },
+    {
+      "id_bm": 2,
+      "id_barang": 2,
+      "jumlah": 30,
+      "tanggal": "2023-06-10T09:15:00.000Z",
+      "Barang": {
+        "nama_barang": "Gamis Hitam"
+      }
+    }
+  ],
+  "pagination": {
+    "total": 2,
+    "page": 1,
+    "limit": 10,
+    "totalPages": 1
+  }
 }
 ```
 
-#### 2. Create Barang Masuk (Protected)
+#### Menambah Data Barang Masuk
+
 ```http
 POST /barang-masuk
+Authorization: Bearer <token>
 Content-Type: application/json
 
 {
-    "id_barang": number,
-    "jumlah": number
+  "id_barang": 1,
+  "jumlah": 50
 }
 
 Response:
 {
-    "success": true,
-    "message": "Barang masuk recorded successfully",    "data": {
-        "id_bm": number,
-        "id_barang": number,
-        "jumlah": number,
-        "tanggal": "datetime"
-    }
+  "message": "Barang masuk berhasil dicatat",
+  "data": {
+    "id_bm": 1,
+    "id_barang": 1,
+    "jumlah": 50,
+    "tanggal": "2023-06-12T10:30:25.000Z"
+  }
 }
 ```
 
-### Barang Keluar Endpoints
+### Barang Keluar
 
-#### 1. Get All Barang Keluar (Protected)
+#### Mendapatkan Semua Data Barang Keluar
+
 ```http
 GET /barang-keluar
+Authorization: Bearer <token>
 
 Response:
 {
-    "success": true,    "data": [
-        {
-            "id_bk": number,
-            "id_barang": number,
-            "jumlah": number,
-            "jumlah_harga": number,
-            "tanggal": "datetime",
-            "Barang": {
-                "nama_barang": "string"
-            }
-        }
-    ]
+  "data": [
+    {
+      "id_bk": 1,
+      "id_barang": 1,
+      "jumlah": 10,
+      "jumlah_harga": "1000000.00",
+      "tanggal": "2023-06-11T13:45:00.000Z",
+      "Barang": {
+        "nama_barang": "Daster Maura",
+        "harga": "100000.00"
+      }
+    },
+    {
+      "id_bk": 2,
+      "id_barang": 2,
+      "jumlah": 5,
+      "jumlah_harga": "500000.00",
+      "tanggal": "2023-06-11T14:20:00.000Z",
+      "Barang": {
+        "nama_barang": "Gamis Hitam",
+        "harga": "100000.00"
+      }
+    }
+  ],
+  "pagination": {
+    "total": 2,
+    "page": 1,
+    "limit": 10,
+    "totalPages": 1
+  }
 }
 ```
 
-#### 2. Create Barang Keluar (Protected)
+#### Menambah Data Barang Keluar
+
 ```http
 POST /barang-keluar
+Authorization: Bearer <token>
 Content-Type: application/json
 
 {
-    "barang_id": number,
-    "jumlah": number
+  "id_barang": 1,
+  "jumlah": 10
 }
 
 Response:
 {
-    "success": true,
-    "message": "Barang keluar recorded successfully",
-    "data": {
-        "id": number,
-        "barang_id": number,
-        "jumlah": number,
-        "jumlah_harga": number,
-        "tanggal": "datetime"
-    }
+  "message": "Barang keluar berhasil dicatat",
+  "data": {
+    "id_bk": 1,
+    "id_barang": 1,
+    "jumlah": 10,
+    "jumlah_harga": "1000000.00",
+    "tanggal": "2023-06-12T11:15:30.000Z"
+  }
 }
 ```
 
-#### 3. Get Chart Data Barang Keluar
+### Dashboard
+
+#### Mendapatkan Data Ringkasan
+
 ```http
-GET /barang-keluar/chart?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD
+GET /dashboard/summary
+Authorization: Bearer <token>
 
 Response:
 {
-    "success": true,
-    "data": {
-        "labels": ["YYYY-MM-DD", ...],
-        "datasets": [{
-            "label": "Jumlah Barang Keluar per Hari",
-            "data": [number, ...],
-            "fill": false,
-            "borderColor": "#FF6384",
-            "tension": 0.1
-        }]
-    }
+  "data": {
+    "totalBarang": 2,
+    "totalStok": 65,
+    "totalMasukHariIni": 0,
+    "totalKeluarHariIni": 0,
+    "totalNilai": 6500000
+  }
 }
 ```
 
-## Error Responses
-```json
+#### Mendapatkan Data Chart Barang Per Kategori
+
+```http
+GET /dashboard/chart/barang
+Authorization: Bearer <token>
+
+Response:
 {
-    "success": false,
-    "message": "Error message description"
+  "data": {
+    "labels": ["Daster", "Gamis"],
+    "datasets": [{
+      "label": "Jumlah Barang per Kategori",
+      "data": [1, 1],
+      "backgroundColor": [
+        "#FF6384",
+        "#36A2EB"
+      ]
+    }]
+  }
 }
 ```
 
-Common error codes:
-- 400: Bad Request
-- 401: Unauthorized
-- 403: Forbidden
-- 404: Not Found
-- 500: Internal Server Error
+#### Mendapatkan Data Chart Barang Masuk
 
-## Flow Penggunaan API
+```http
+GET /dashboard/chart/barang-masuk?startDate=2023-06-01&endDate=2023-06-12
+Authorization: Bearer <token>
 
-### 1. Setup Awal
-1. Register user baru
-2. Login untuk mendapatkan token
-3. Gunakan token untuk akses protected routes
+Response:
+{
+  "data": {
+    "labels": ["2023-06-10"],
+    "datasets": [{
+      "label": "Jumlah Barang Masuk per Hari",
+      "data": [80],
+      "fill": false,
+      "borderColor": "#36A2EB",
+      "tension": 0.1
+    }]
+  }
+}
+```
 
-### 2. Manajemen Barang
-1. Create barang baru (dengan foto)
-2. Get list barang untuk mendapatkan ID barang
+#### Mendapatkan Data Chart Barang Keluar
 
-### 3. Transaksi Barang Masuk
-1. Create barang masuk dengan barang_id yang valid
-2. Stok barang akan otomatis bertambah
+```http
+GET /dashboard/chart/barang-keluar?startDate=2023-06-01&endDate=2023-06-12
+Authorization: Bearer <token>
 
-### 4. Transaksi Barang Keluar
-1. Create barang keluar dengan barang_id yang valid
-2. Sistem akan mengecek stok mencukupi
-3. Jumlah harga akan dihitung otomatis
-4. Stok barang akan otomatis berkurang
+Response:
+{
+  "data": {
+    "labels": ["2023-06-11"],
+    "datasets": [{
+      "label": "Jumlah Barang Keluar per Hari",
+      "data": [15],
+      "fill": false,
+      "borderColor": "#FF6384",
+      "tension": 0.1
+    }]
+  }
+}
+```
 
-### 5. Monitoring
-1. Get chart data untuk visualisasi barang keluar
-2. Filter data berdasarkan range tanggal
+### Profil
+
+#### Mendapatkan Profil
+
+```http
+GET /profile
+Authorization: Bearer <token>
+
+Response:
+{
+  "id": 1,
+  "nama": "Admin Toko",
+  "nama_lengkap": "Admin Toko Daster Maura",
+  "username": "admin",
+  "email": "admin@dastermaura.com",
+  "foto_profil": "http://localhost:5000/uploads/profile/profile_1.jpg",
+  "role": "admin",
+  "created_at": "2023-06-01T08:00:00.000Z"
+}
+```
+
+#### Mengupdate Profil
+
+```http
+PUT /profile
+Authorization: Bearer <token>
+Content-Type: multipart/form-data
+
+Form Data:
+- nama: "Admin Toko Update"
+- nama_lengkap: "Admin Toko Daster Maura Update"
+- username: "admin"
+- email: "admin@dastermaura.com"
+- foto: [file foto] (opsional)
+
+Response:
+{
+  "message": "Profil berhasil diperbarui",
+  "user": {
+    "id": 1,
+    "nama": "Admin Toko Update",
+    "nama_lengkap": "Admin Toko Daster Maura Update",
+    "username": "admin",
+    "email": "admin@dastermaura.com",
+    "foto_profil": "http://localhost:5000/uploads/profile/profile_1.jpg",
+    "role": "admin"
+  }
+}
+```
+
+## Panduan Pengujian di Postman
+
+### Langkah 1: Setup Environment
+
+1. Buka Postman
+2. Klik tombol "New" dan pilih "Environment"
+3. Beri nama "StockFlow API"
+4. Tambahkan variabel:
+   - `base_url` dengan value `http://localhost:5000/api`
+   - `token` (biarkan kosong)
+5. Klik "Save"
+
+### Langkah 2: Import Collection
+
+1. Klik tombol "Import" di Postman
+2. Upload file collection atau masukkan link
+3. Setelah import selesai, collection "StockFlow API" akan muncul
+
+### Langkah 3: Autentikasi
+
+1. Jalankan request "Login" dengan kredensial yang valid
+2. Setelah login berhasil, salin token dari response
+3. Simpan token di variabel environment:
+   - Klik "Environment quick look" (ikon mata)
+   - Edit variabel "token" dengan nilai token yang telah disalin
+   - Klik "Save"
+
+### Langkah 4: Menggunakan API
+
+Semua request yang memerlukan autentikasi akan menggunakan token dari environment variabel.
+Untuk mengirim request dengan token:
+
+1. Pilih request yang ingin dijalankan
+2. Pada tab "Authorization", pilih Type "Bearer Token"
+3. Pada field Token, masukkan `{{token}}`
+4. Klik "Send"
+
+## Contoh Penggunaan
+
+### Skenario: Mengelola Stok Daster Maura
+
+#### 1. Login Sebagai Admin
+
+```http
+POST /auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@dastermaura.com",
+  "password": "password123"
+}
+```
+
+#### 2. Tambah Produk Baru
+
+```http
+POST /barang
+Authorization: Bearer <token>
+Content-Type: multipart/form-data
+
+- nama_barang: "Daster Maura"
+- kategori: "Daster"
+- harga: 100000
+- stok: 0
+- foto: [file gambar]
+```
+
+#### 3. Tambah Stok Barang (Barang Masuk)
+
+```http
+POST /barang-masuk
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "id_barang": 1,
+  "jumlah": 50
+}
+```
+
+#### 4. Catat Penjualan (Barang Keluar)
+
+```http
+POST /barang-keluar
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "id_barang": 1,
+  "jumlah": 10
+}
+```
+
+#### 5. Lihat Laporan Dashboard
+
+```http
+GET /dashboard/summary
+Authorization: Bearer <token>
+```
+
+```http
+GET /dashboard/chart/barang-keluar?startDate=2023-06-01&endDate=2023-06-12
+Authorization: Bearer <token>
+```
+
+---
+
+## Catatan Penting
+
+- API ini menggunakan token JWT yang berlaku selama 8 jam
+- Format tanggal yang digunakan adalah ISO 8601 (YYYY-MM-DD)
+- Semua endpoint protected memerlukan token yang valid di header Authorization
+- Pastikan folder `uploads` memiliki izin tulis untuk penyimpanan foto
+
+Jika ada pertanyaan atau kendala dalam penggunaan API, silakan hubungi admin@dastermaura.com
