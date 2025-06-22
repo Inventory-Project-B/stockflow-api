@@ -70,12 +70,13 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-  const { email, password } = req.body;
+  const { username, email, password } = req.body;
+  const loginIdentifier = username || email; // Use whichever is provided
 
   try {
     const [users] = await db.query(
       "SELECT * FROM users WHERE email = ? OR username = ?",
-      [email, email]
+      [loginIdentifier, loginIdentifier]
     );
 
     if (users.length === 0) {
