@@ -5,16 +5,19 @@ This document outlines the structure and data flow of the dashboard feature in t
 ## API Endpoints
 
 1. `GET /api/dashboard/summary`
+
    - Purpose: Retrieve summary statistics for the dashboard
    - Authentication: Required
    - Data: Total items, total incoming/outgoing, inventory value, etc.
 
 2. `GET /api/dashboard/chart/barang`
+
    - Purpose: Get data for visualizing items by category
    - Authentication: Required
    - Data: Categories and item counts
 
 3. `GET /api/dashboard/chart/barang-masuk`
+
    - Purpose: Get time-series data for incoming items
    - Authentication: Required
    - Optional query parameters: startDate, endDate
@@ -47,42 +50,47 @@ The dashboard feature primarily uses the following database tables:
 To integrate the dashboard API with a frontend:
 
 1. Authentication:
+
    ```javascript
-   const token = localStorage.getItem('token');
+   const token = localStorage.getItem("token");
    const headers = { Authorization: `Bearer ${token}` };
    ```
 
 2. Fetching summary data:
+
    ```javascript
-   const response = await fetch('/api/dashboard/summary', { headers });
+   const response = await fetch("/api/dashboard/summary", { headers });
    const data = await response.json();
    ```
 
 3. Creating charts:
+
    ```javascript
    // Using a library like Chart.js
-   const response = await fetch('/api/dashboard/chart/barang', { headers });
+   const response = await fetch("/api/dashboard/chart/barang", { headers });
    const { data } = await response.json();
-   
+
    // Example with Chart.js
    new Chart(ctx, {
-     type: 'pie',
+     type: "pie",
      data: {
-       labels: data.map(item => item.kategori),
-       datasets: [{
-         data: data.map(item => item.jumlah),
-         backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', /* more colors */]
-       }]
-     }
+       labels: data.map((item) => item.kategori),
+       datasets: [
+         {
+           data: data.map((item) => item.jumlah),
+           backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56" /* more colors */],
+         },
+       ],
+     },
    });
    ```
 
 4. Using date filters:
    ```javascript
-   const startDate = '2025-01-01';
-   const endDate = '2025-12-31';
+   const startDate = "2025-01-01";
+   const endDate = "2025-12-31";
    const response = await fetch(
-     `/api/dashboard/chart/barang-masuk?startDate=${startDate}&endDate=${endDate}`, 
+     `/api/dashboard/chart/barang-masuk?startDate=${startDate}&endDate=${endDate}`,
      { headers }
    );
    const data = await response.json();
