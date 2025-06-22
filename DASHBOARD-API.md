@@ -5,11 +5,13 @@ This document provides information about the Dashboard API endpoints available i
 ## Endpoints
 
 ### 1. Get Dashboard Summary
+
 **Endpoint:** `GET /api/dashboard/summary`  
 **Authentication:** Required  
 **Description:** Returns a summary of inventory statistics.
 
 **Response Structure:**
+
 ```json
 {
   "success": true,
@@ -34,11 +36,13 @@ This document provides information about the Dashboard API endpoints available i
 ```
 
 ### 2. Get Barang by Kategori Chart
+
 **Endpoint:** `GET /api/dashboard/chart/barang`  
 **Authentication:** Required  
 **Description:** Returns data for visualizing distribution of items by category.
 
 **Response Structure:**
+
 ```json
 {
   "success": true,
@@ -60,15 +64,18 @@ This document provides information about the Dashboard API endpoints available i
 ```
 
 ### 3. Get Barang Masuk Chart
+
 **Endpoint:** `GET /api/dashboard/chart/barang-masuk?startDate=2025-01-01&endDate=2025-12-31`  
 **Authentication:** Required  
 **Description:** Returns data for visualizing incoming items over time.
 
 **Query Parameters:**
+
 - `startDate` (optional): Filter data from this date (YYYY-MM-DD)
 - `endDate` (optional): Filter data until this date (YYYY-MM-DD)
 
 **Response Structure:**
+
 ```json
 {
   "success": true,
@@ -86,15 +93,18 @@ This document provides information about the Dashboard API endpoints available i
 ```
 
 ### 4. Get Barang Keluar Chart
+
 **Endpoint:** `GET /api/dashboard/chart/barang-keluar?startDate=2025-01-01&endDate=2025-12-31`  
 **Authentication:** Required  
 **Description:** Returns data for visualizing outgoing items over time.
 
 **Query Parameters:**
+
 - `startDate` (optional): Filter data from this date (YYYY-MM-DD)
 - `endDate` (optional): Filter data until this date (YYYY-MM-DD)
 
 **Response Structure:**
+
 ```json
 {
   "success": true,
@@ -127,13 +137,13 @@ Example request using JavaScript:
 
 ```javascript
 const fetchDashboardData = async () => {
-  const token = localStorage.getItem('authToken');
-  const response = await fetch('http://localhost:5000/api/dashboard/summary', {
+  const token = localStorage.getItem("authToken");
+  const response = await fetch("http://localhost:5000/api/dashboard/summary", {
     headers: {
-      'Authorization': `Bearer ${token}`
-    }
+      Authorization: `Bearer ${token}`,
+    },
   });
-  
+
   const data = await response.json();
   // Use the data to populate dashboard UI
 };

@@ -70,24 +70,22 @@ Base URL: `http://localhost:5000/api`
 POST /auth/register
 Content-Type: application/json
 
-{
-  "nama": "Admin Toko",
-  "nama_lengkap": "Admin Toko Daster Maura",
-  "username": "admin",
-  "email": "admin@dastermaura.com",
-  "password": "password123",
+{  "nama": "kelompok2",
+  "nama_lengkap": "Kelompok 2",
+  "username": "kelompok2",
+  "email": "kelompok2@mail.com",
+  "password": "admin123",
   "role": "admin"
 }
 
 Response:
-{
-  "message": "Registrasi berhasil",
+{  "message": "Registrasi berhasil",
   "user": {
     "id": 1,
-    "nama": "Admin Toko",
-    "nama_lengkap": "Admin Toko Daster Maura",
-    "username": "admin",
-    "email": "admin@dastermaura.com",
+    "nama": "kelompok2",
+    "nama_lengkap": "Kelompok 2",
+    "username": "kelompok2",
+    "email": "kelompok2@mail.com",
     "role": "admin"
   }
 }
@@ -100,8 +98,8 @@ POST /auth/login
 Content-Type: application/json
 
 {
-  "email": "admin@dastermaura.com",
-  "password": "password123"
+  "username": "kelompok2",
+  "password": "admin123"
 }
 
 Response:
@@ -110,10 +108,10 @@ Response:
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
   "user": {
     "id": 1,
-    "nama": "Admin Toko",
-    "nama_lengkap": "Admin Toko Daster Maura",
-    "username": "admin",
-    "email": "admin@dastermaura.com",
+    "nama": "kelompok2",
+    "nama_lengkap": "Kelompok 2",
+    "username": "kelompok2",
+    "email": "kelompok2@mail.com",
     "role": "admin",
     "foto_profil": "http://localhost:5000/uploads/profile/profile_1.jpg"
   }
@@ -482,10 +480,9 @@ Authorization: Bearer <token>
 Response:
 {
   "id": 1,
-  "nama": "Admin Toko",
-  "nama_lengkap": "Admin Toko Daster Maura",
-  "username": "admin",
-  "email": "admin@dastermaura.com",
+  "nama": "Admin Toko",  "nama_lengkap": "Kelompok 2",
+  "username": "kelompok2",
+  "email": "kelompok2@mail.com",
   "foto_profil": "http://localhost:5000/uploads/profile/profile_1.jpg",
   "role": "admin",
   "created_at": "2023-06-01T08:00:00.000Z"
@@ -500,10 +497,10 @@ Authorization: Bearer <token>
 Content-Type: multipart/form-data
 
 Form Data:
-- nama: "Admin Toko Update"
-- nama_lengkap: "Admin Toko Daster Maura Update"
-- username: "admin"
-- email: "admin@dastermaura.com"
+- nama: "kelompok2 Update"
+- nama_lengkap: "Kelompok 2 Update"
+- username: "kelompok2"
+- email: "kelompok2@mail.com"
 - foto: [file foto] (opsional)
 
 Response:
@@ -512,9 +509,8 @@ Response:
   "user": {
     "id": 1,
     "nama": "Admin Toko Update",
-    "nama_lengkap": "Admin Toko Daster Maura Update",
-    "username": "admin",
-    "email": "admin@dastermaura.com",
+    "nama_lengkap": "Admin Toko Daster Maura Update",    "username": "kelompok2",
+    "email": "kelompok2@mail.com",
     "foto_profil": "http://localhost:5000/uploads/profile/profile_1.jpg",
     "role": "admin"
   }
@@ -569,8 +565,8 @@ POST /auth/login
 Content-Type: application/json
 
 {
-  "email": "admin@dastermaura.com",
-  "password": "password123"
+  "username": "kelompok2",
+  "password": "admin123"
 }
 ```
 
@@ -635,4 +631,4 @@ Authorization: Bearer <token>
 - Semua endpoint protected memerlukan token yang valid di header Authorization
 - Pastikan folder `uploads` memiliki izin tulis untuk penyimpanan foto
 
-Jika ada pertanyaan atau kendala dalam penggunaan API, silakan hubungi admin@dastermaura.com
+Jika ada pertanyaan atau kendala dalam penggunaan API, silakan hubungi kelompok2@mail.com

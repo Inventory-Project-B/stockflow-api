@@ -1,0 +1,572 @@
+{
+  "info": {
+    "_postman_id": "d287c2a0-9309-49f1-8a5a-c2d9f6b2eadb",
+    "name": "StockFlow API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Collection untuk testing StockFlow API"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Menyimpan token dari response login",
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.token) {",
+                  "        pm.environment.set(\"authToken\", jsonData.token);",
+                  "        console.log(\"Token saved to environment\");",
+                  "    }",
+                  "}",
+                  "",
+                  "// Validasi response",
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has success flag\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.eql(true);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"kelompok2\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Login ke aplikasi dan mendapatkan token"
+          },
+          "response": []
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"User Baru\",\n  \"nama_lengkap\": \"User Baru Lengkap\",\n  \"username\": \"userbaru\",\n  \"email\": \"user.baru@mail.com\",\n  \"password\": \"password123\",\n  \"role\": \"pegawai\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "register"]
+            },
+            "description": "Mendaftarkan user baru"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoint untuk autentikasi"
+    },
+    {
+      "name": "Barang",
+      "item": [
+        {
+          "name": "Get All Barang",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/barang",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "barang"]
+            },
+            "description": "Mendapatkan semua data barang"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Barang By ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/barang/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "barang", "1"]
+            },
+            "description": "Mendapatkan detail barang berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Barang",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "kode",
+                  "value": "BRG003",
+                  "type": "text"
+                },
+                {
+                  "key": "nama_barang",
+                  "value": "Gamis",
+                  "type": "text"
+                },
+                {
+                  "key": "kategori",
+                  "value": "Pakaian",
+                  "type": "text"
+                },
+                {
+                  "key": "harga",
+                  "value": "200000",
+                  "type": "text"
+                },
+                {
+                  "key": "stok",
+                  "value": "30",
+                  "type": "text"
+                },
+                {
+                  "key": "deskripsi",
+                  "value": "Gamis syari",
+                  "type": "text"
+                },
+                {
+                  "key": "foto",
+                  "type": "file",
+                  "src": "/path/to/your/image.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/barang",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "barang"]
+            },
+            "description": "Membuat barang baru"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Barang",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "kode",
+                  "value": "BRG003",
+                  "type": "text"
+                },
+                {
+                  "key": "nama_barang",
+                  "value": "Gamis Dewasa",
+                  "type": "text"
+                },
+                {
+                  "key": "kategori",
+                  "value": "Pakaian",
+                  "type": "text"
+                },
+                {
+                  "key": "harga",
+                  "value": "225000",
+                  "type": "text"
+                },
+                {
+                  "key": "stok",
+                  "value": "30",
+                  "type": "text"
+                },
+                {
+                  "key": "deskripsi",
+                  "value": "Gamis syari dewasa",
+                  "type": "text"
+                },
+                {
+                  "key": "foto",
+                  "type": "file",
+                  "src": "/path/to/your/image.jpg",
+                  "disabled": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/barang/3",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "barang", "3"]
+            },
+            "description": "Mengupdate barang berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Barang",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/barang/3",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "barang", "3"]
+            },
+            "description": "Menghapus barang berdasarkan ID"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoint untuk manajemen barang"
+    },
+    {
+      "name": "Barang Masuk",
+      "item": [
+        {
+          "name": "Get All Barang Masuk",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/barang-masuk",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "barang-masuk"]
+            },
+            "description": "Mendapatkan semua data barang masuk"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Barang Masuk",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"kode_transaksi\": \"BM003\",\n  \"id_barang\": 3,\n  \"jumlah\": 10,\n  \"tanggal\": \"2025-06-22\",\n  \"keterangan\": \"Pengiriman dari supplier\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/barang-masuk",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "barang-masuk"]
+            },
+            "description": "Membuat transaksi barang masuk baru"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoint untuk manajemen barang masuk"
+    },
+    {
+      "name": "Barang Keluar",
+      "item": [
+        {
+          "name": "Get All Barang Keluar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/barang-keluar",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "barang-keluar"]
+            },
+            "description": "Mendapatkan semua data barang keluar"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Barang Keluar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"kode_transaksi\": \"BK003\",\n  \"id_barang\": 3,\n  \"jumlah\": 2,\n  \"tanggal\": \"2025-06-22\",\n  \"keterangan\": \"Pengiriman ke toko C\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/barang-keluar",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "barang-keluar"]
+            },
+            "description": "Membuat transaksi barang keluar baru"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoint untuk manajemen barang keluar"
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Dashboard Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/dashboard/summary",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "dashboard", "summary"]
+            },
+            "description": "Mendapatkan ringkasan dashboard"
+          },
+          "response": []
+        },
+        {
+          "name": "Barang per Kategori Chart",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/dashboard/chart/barang",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "dashboard", "chart", "barang"]
+            },
+            "description": "Mendapatkan data untuk grafik barang per kategori"
+          },
+          "response": []
+        },
+        {
+          "name": "Barang Masuk Chart",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/dashboard/chart/barang-masuk",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "dashboard", "chart", "barang-masuk"]
+            },
+            "description": "Mendapatkan data untuk grafik barang masuk"
+          },
+          "response": []
+        },
+        {
+          "name": "Barang Masuk Chart (with date filters)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/dashboard/chart/barang-masuk?startDate=2025-01-01&endDate=2025-12-31",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "dashboard", "chart", "barang-masuk"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2025-01-01"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2025-12-31"
+                }
+              ]
+            },
+            "description": "Mendapatkan data untuk grafik barang masuk dengan filter tanggal"
+          },
+          "response": []
+        },
+        {
+          "name": "Barang Keluar Chart",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/dashboard/chart/barang-keluar",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "dashboard", "chart", "barang-keluar"]
+            },
+            "description": "Mendapatkan data untuk grafik barang keluar"
+          },
+          "response": []
+        },
+        {
+          "name": "Barang Keluar Chart (with date filters)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/dashboard/chart/barang-keluar?startDate=2025-01-01&endDate=2025-12-31",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "dashboard", "chart", "barang-keluar"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2025-01-01"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2025-12-31"
+                }
+              ]
+            },
+            "description": "Mendapatkan data untuk grafik barang keluar dengan filter tanggal"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoint untuk dashboard"
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ]
+}

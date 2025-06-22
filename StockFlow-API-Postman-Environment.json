@@ -1,0 +1,21 @@
+{
+  "id": "4d756a58-af31-4bcb-a000-83f6b25c83a1",
+  "name": "StockFlow API Environment",
+  "values": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "secret",
+      "enabled": true
+    }
+  ],
+  "_postman_variable_scope": "environment",
+  "_postman_exported_at": "2025-06-22T12:00:00.000Z",
+  "_postman_exported_using": "Postman/10.15.0"
+}
