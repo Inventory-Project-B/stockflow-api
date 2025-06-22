@@ -1,4 +1,4 @@
-# Dokumentasi API StockFlow - Toko Fashion Daster Maura
+# Dokumentasi API StockFlow - Toko Fashion Daster Bordir Cantik
 
 ## Tentang Aplikasi
 
