@@ -93,6 +93,8 @@ Response:
 
 #### Login
 
+> **Catatan:** Login dapat dilakukan dengan menggunakan username saja (tanpa email).
+
 ```http
 POST /auth/login
 Content-Type: application/json

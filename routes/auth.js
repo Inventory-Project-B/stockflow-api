@@ -74,7 +74,14 @@ router.post(
 router.post(
   "/login",
   validate([
-    body("email").notEmpty().withMessage("Email/Username wajib diisi"),
+    body(["username", "email"])
+      .optional()
+      .custom((value, { req }) => {
+        if (!req.body.username && !req.body.email) {
+          throw new Error("Username atau Email wajib diisi");
+        }
+        return true;
+      }),
     body("password").notEmpty().withMessage("Password wajib diisi"),
   ]),
   login
