@@ -16,9 +16,13 @@ Dokumentasi ini menyediakan informasi tentang endpoint API StockFlow beserta con
 - [Barang Masuk](#barang-masuk)
   - [Mendapatkan Semua Barang Masuk](#mendapatkan-semua-barang-masuk)
   - [Membuat Barang Masuk Baru](#membuat-barang-masuk-baru)
+  - [Mengupdate Barang Masuk](#mengupdate-barang-masuk)
+  - [Menghapus Barang Masuk](#menghapus-barang-masuk)
 - [Barang Keluar](#barang-keluar)
   - [Mendapatkan Semua Barang Keluar](#mendapatkan-semua-barang-keluar)
   - [Membuat Barang Keluar Baru](#membuat-barang-keluar-baru)
+  - [Mengupdate Barang Keluar](#mengupdate-barang-keluar)
+  - [Menghapus Barang Keluar](#menghapus-barang-keluar)
 - [Dashboard](#dashboard)
   - [Ringkasan Dashboard](#ringkasan-dashboard)
   - [Grafik Barang per Kategori](#grafik-barang-per-kategori)
@@ -298,11 +302,9 @@ Dokumentasi ini menyediakan informasi tentang endpoint API StockFlow beserta con
 
 ```json
 {
-  "kode_transaksi": "BM003",
-  "id_barang": 3,
+  "barang_id": 3,
   "jumlah": 10,
-  "tanggal": "2025-06-22",
-  "keterangan": "Pengiriman dari supplier"
+  "tanggal": "2025-06-22"
 }
 ```
 
@@ -314,13 +316,55 @@ Dokumentasi ini menyediakan informasi tentang endpoint API StockFlow beserta con
   "message": "Barang masuk berhasil ditambahkan",
   "data": {
     "id": 3,
-    "kode_transaksi": "BM003",
-    "id_barang": 3,
-    "nama_barang": "Gamis",
+    "barang_id": 3,
     "jumlah": 10,
-    "tanggal": "2025-06-22T00:00:00.000Z",
-    "keterangan": "Pengiriman dari supplier"
+    "tanggal": "2025-06-22T00:00:00.000Z"
   }
+}
+```
+
+### Mengupdate Barang Masuk
+
+**Endpoint:** `PUT http://localhost:5000/api/barang-masuk/1`
+
+**Headers:**
+
+- Authorization: Bearer {token}
+- Content-Type: application/json
+
+**Request Body:**
+
+```json
+{
+  "barang_id": 3,
+  "jumlah": 15,
+  "tanggal": "2025-06-22"
+}
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "message": "Barang masuk berhasil diperbarui"
+}
+```
+
+### Menghapus Barang Masuk
+
+**Endpoint:** `DELETE http://localhost:5000/api/barang-masuk/1`
+
+**Headers:**
+
+- Authorization: Bearer {token}
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "message": "Barang masuk berhasil dihapus"
 }
 ```
 
@@ -375,11 +419,9 @@ Dokumentasi ini menyediakan informasi tentang endpoint API StockFlow beserta con
 
 ```json
 {
-  "kode_transaksi": "BK003",
-  "id_barang": 3,
+  "barang_id": 3,
   "jumlah": 2,
-  "tanggal": "2025-06-22",
-  "keterangan": "Pengiriman ke toko C"
+  "tanggal": "2025-06-22"
 }
 ```
 
@@ -391,13 +433,55 @@ Dokumentasi ini menyediakan informasi tentang endpoint API StockFlow beserta con
   "message": "Barang keluar berhasil ditambahkan",
   "data": {
     "id": 3,
-    "kode_transaksi": "BK003",
-    "id_barang": 3,
-    "nama_barang": "Gamis",
+    "barang_id": 3,
     "jumlah": 2,
-    "tanggal": "2025-06-22T00:00:00.000Z",
-    "keterangan": "Pengiriman ke toko C"
+    "tanggal": "2025-06-22T00:00:00.000Z"
   }
+}
+```
+
+### Mengupdate Barang Keluar
+
+**Endpoint:** `PUT http://localhost:5000/api/barang-keluar/1`
+
+**Headers:**
+
+- Authorization: Bearer {token}
+- Content-Type: application/json
+
+**Request Body:**
+
+```json
+{
+  "barang_id": 3,
+  "jumlah": 3,
+  "tanggal": "2025-06-22"
+}
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "message": "Barang keluar berhasil diperbarui"
+}
+```
+
+### Menghapus Barang Keluar
+
+**Endpoint:** `DELETE http://localhost:5000/api/barang-keluar/1`
+
+**Headers:**
+
+- Authorization: Bearer {token}
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "message": "Barang keluar berhasil dihapus"
 }
 ```
 

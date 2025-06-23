@@ -322,7 +322,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"kode_transaksi\": \"BM003\",\n  \"id_barang\": 3,\n  \"jumlah\": 10,\n  \"tanggal\": \"2025-06-22\",\n  \"keterangan\": \"Pengiriman dari supplier\"\n}"
+              "raw": "{\n  \"barang_id\": 3,\n  \"jumlah\": 10,\n  \"tanggal\": \"2025-06-22\"\n}"
             },
             "url": {
               "raw": "http://localhost:5000/api/barang-masuk",
@@ -332,6 +332,56 @@
               "path": ["api", "barang-masuk"]
             },
             "description": "Membuat transaksi barang masuk baru"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Barang Masuk",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"barang_id\": 3,\n  \"jumlah\": 15,\n  \"tanggal\": \"2025-06-22\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/barang-masuk/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "barang-masuk", "1"]
+            },
+            "description": "Mengupdate transaksi barang masuk berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Barang Masuk",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/barang-masuk/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "barang-masuk", "1"]
+            },
+            "description": "Menghapus transaksi barang masuk berdasarkan ID"
           },
           "response": []
         }
@@ -378,7 +428,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"kode_transaksi\": \"BK003\",\n  \"id_barang\": 3,\n  \"jumlah\": 2,\n  \"tanggal\": \"2025-06-22\",\n  \"keterangan\": \"Pengiriman ke toko C\"\n}"
+              "raw": "{\n  \"barang_id\": 3,\n  \"jumlah\": 2,\n  \"tanggal\": \"2025-06-22\"\n}"
             },
             "url": {
               "raw": "http://localhost:5000/api/barang-keluar",
@@ -388,6 +438,56 @@
               "path": ["api", "barang-keluar"]
             },
             "description": "Membuat transaksi barang keluar baru"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Barang Keluar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"barang_id\": 3,\n  \"jumlah\": 3,\n  \"tanggal\": \"2025-06-22\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/barang-keluar/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "barang-keluar", "1"]
+            },
+            "description": "Mengupdate transaksi barang keluar berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Barang Keluar",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/barang-keluar/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "barang-keluar", "1"]
+            },
+            "description": "Menghapus transaksi barang keluar berdasarkan ID"
           },
           "response": []
         }
